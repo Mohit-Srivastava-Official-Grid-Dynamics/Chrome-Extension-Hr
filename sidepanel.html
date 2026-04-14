@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Timesheet Side Panel</title>
+    <link rel="stylesheet" href="sidepanel.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero-card">
+        <div>
+          <div class="eyebrow">Google Calendar</div>
+          <h1>Timesheet</h1>
+          <p class="subtitle">Your live schedule, cleaned up and ready to join.</p>
+        </div>
+        <div class="hero-meta">
+          <div class="clock" id="clock"></div>
+          <div class="status-badge" id="statusBadge">Loading…</div>
+        </div>
+      </header>
+
+      <section class="status-card">
+        <div class="status-row">
+          <div>
+            <div class="status-label">Last sync</div>
+            <div class="status-value" id="lastSyncText">Checking…</div>
+          </div>
+          <div class="status-actions hidden" id="statusActions">
+            <button id="retryBtn" class="secondary-btn" type="button">Connect</button>
+            <button id="disconnectBtn" class="ghost-btn" type="button">Disconnect</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="summary-grid">
+        <article class="summary-card">
+          <span class="label">Upcoming</span>
+          <strong id="upcomingCount">0</strong>
+          <span class="hint">meetings in the queue</span>
+        </article>
+        <article class="summary-card accent-card">
+          <span class="label">Planned today</span>
+          <strong id="plannedToday">0m</strong>
+          <span class="hint">total scheduled time</span>
+        </article>
+      </section>
+
+      <section id="errorBox" class="error-box hidden"></section>
+
+      <section class="events-section">
+        <div class="section-header">
+          <h2>Upcoming items</h2>
+          <span class="section-caption" id="sectionCaption">Sorted by start time</span>
+        </div>
+
+        <div id="eventsList" class="events-list"></div>
+
+        <div id="emptyState" class="empty-state hidden">
+          <div class="empty-title">Nothing upcoming right now</div>
+          <div class="empty-copy">When a new calendar event appears, it will show up here automatically.</div>
+        </div>
+      </section>
+    </div>
+
+    <script src="sidepanel.js"></script>
+  </body>
+</html>
