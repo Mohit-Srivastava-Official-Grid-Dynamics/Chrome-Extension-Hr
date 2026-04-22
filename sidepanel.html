@@ -3,64 +3,186 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Timesheet Side Panel</title>
+    <title>Calendar Side Panel</title>
     <link rel="stylesheet" href="sidepanel.css" />
   </head>
   <body>
     <div class="app-shell">
-      <header class="hero-card">
-        <div>
-          <div class="eyebrow">Google Calendar</div>
-          <h1>Timesheet</h1>
-          <p class="subtitle">Your live schedule, cleaned up and ready to join.</p>
+      <nav class="tab-shell" aria-label="Primary">
+        <div class="tab-bar">
+          <button id="scheduleTabBtn" class="tab-btn active" type="button">Schedule</button>
+          <button id="assistantTabBtn" class="tab-btn" type="button">Assistant</button>
         </div>
-        <div class="hero-meta">
-          <div class="clock" id="clock"></div>
-          <div class="status-badge" id="statusBadge">Loading…</div>
-        </div>
-      </header>
+      </nav>
 
-      <section class="status-card">
-        <div class="status-row">
-          <div>
-            <div class="status-label">Last sync</div>
-            <div class="status-value" id="lastSyncText">Checking…</div>
+      <div id="scheduleTab" class="tab-view">
+        <section class="welcome-card">
+          <div class="welcome-topline">
+            <div class="welcome-copy">
+              <div class="eyebrow">Today in focus</div>
+              <h1 id="greetingTitle">Hi there</h1>
+              <p id="greetingLine" class="hero-line">Let's turn today into a smooth run of meetings and deep work.</p>
+            </div>
+            <div class="hero-timebox">
+              <div class="time-label">Current time</div>
+              <div class="clock" id="clock"></div>
+              <div class="status-badge" id="statusBadge">Loading…</div>
+            </div>
           </div>
-          <div class="status-actions hidden" id="statusActions">
-            <button id="retryBtn" class="secondary-btn" type="button">Connect</button>
-            <button id="disconnectBtn" class="ghost-btn" type="button">Disconnect</button>
+
+          <div class="welcome-bottomline">
+            <article class="hero-stat">
+              <span class="label">Upcoming today</span>
+              <strong id="upcomingCount">0</strong>
+              <span class="hint" id="dashboardHint">No meetings lined up yet.</span>
+            </article>
+
+            <div class="status-actions" id="statusActions">
+              <button id="retryBtn" class="secondary-btn" type="button">Connect</button>
+              <button id="disconnectBtn" class="ghost-btn" type="button">Disconnect</button>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section class="summary-grid">
-        <article class="summary-card">
-          <span class="label">Upcoming</span>
-          <strong id="upcomingCount">0</strong>
-          <span class="hint">meetings in the queue</span>
-        </article>
-        <article class="summary-card accent-card">
-          <span class="label">Planned today</span>
-          <strong id="plannedToday">0m</strong>
-          <span class="hint">total scheduled time</span>
-        </article>
-      </section>
+        <section id="errorBox" class="error-box hidden"></section>
 
-      <section id="errorBox" class="error-box hidden"></section>
+        <section class="events-section">
+          <div class="section-header">
+            <div>
+              <h2>Upcoming today</h2>
+              <div class="section-caption" id="sectionCaption">Only today's remaining meetings are shown here.</div>
+            </div>
+          </div>
 
-      <section class="events-section">
-        <div class="section-header">
-          <h2>Upcoming items</h2>
-          <span class="section-caption" id="sectionCaption">Sorted by start time</span>
-        </div>
+          <div id="eventsList" class="events-list"></div>
 
-        <div id="eventsList" class="events-list"></div>
+          <div id="emptyState" class="empty-state hidden">
+            <div class="empty-title">Nothing else is lined up for today</div>
+            <div class="empty-copy">You're clear for the rest of the day. New meetings will appear here as soon as they land.</div>
+          </div>
+        </section>
 
-        <div id="emptyState" class="empty-state hidden">
-          <div class="empty-title">Nothing upcoming right now</div>
-          <div class="empty-copy">When a new calendar event appears, it will show up here automatically.</div>
-        </div>
-      </section>
+        <section class="events-section secondary-events-section">
+          <div class="section-header">
+            <div>
+              <h2>More meetings ahead</h2>
+              <div class="section-caption" id="futureSectionCaption">Tomorrow and beyond, one page at a time.</div>
+            </div>
+
+            <div class="pagination-controls">
+              <button id="futurePrevBtn" class="ghost-btn ghost-btn--sm" type="button">Previous</button>
+              <span id="futurePageIndicator" class="pagination-indicator">Page 1</span>
+              <button id="futureNextBtn" class="ghost-btn ghost-btn--sm" type="button">Next</button>
+            </div>
+          </div>
+
+          <div id="futureEventsList" class="events-list"></div>
+
+          <div id="futureEmptyState" class="empty-state hidden">
+            <div class="empty-title">Nothing upcoming after today</div>
+            <div class="empty-copy">Once something lands later this week, it will show up here in tidy pages.</div>
+          </div>
+        </section>
+      </div>
+
+      <div id="assistantTab" class="tab-view hidden">
+        <section class="assistant-shell">
+          <div class="assistant-header">
+            <h2>Scheduler assistant</h2>
+            <button id="assistantSettingsToggle" class="ghost-btn ghost-btn--sm" type="button">Settings</button>
+          </div>
+
+          <section id="assistantSettings" class="assistant-settings hidden">
+            <div class="field-grid">
+              <label class="field">
+                <span class="field-label">Google Cloud Project ID</span>
+                <input id="vertexProjectIdInput" class="text-input" type="text" placeholder="my-project-12345" autocomplete="off" />
+              </label>
+
+              <label class="field">
+                <span class="field-label">Model</span>
+                <input id="vertexModelInput" class="text-input" type="text" placeholder="gemini-2.0-flash" autocomplete="off" />
+              </label>
+            </div>
+
+            <div class="settings-actions">
+              <button id="saveAssistantSettingsBtn" class="secondary-btn" type="button">Save</button>
+              <button id="clearAssistantSettingsBtn" class="ghost-btn" type="button">Clear</button>
+            </div>
+
+            <div class="settings-hint">
+              The selected project and model are stored locally in Chrome. For production, move model access behind a backend you control.
+            </div>
+
+            <div class="contacts-box">
+              <div class="contacts-header">
+                <div>
+                  <div class="status-label">Employee directory</div>
+                  <div class="contacts-subtitle" id="directoryCountText">Store Grid employee emails locally so the assistant can resolve names instantly.</div>
+                </div>
+              </div>
+
+              <div class="field-grid field-grid--contacts">
+                <label class="field">
+                  <span class="field-label">Name</span>
+                  <input id="contactNameInput" class="text-input" type="text" placeholder="Alice" autocomplete="off" />
+                </label>
+                <label class="field">
+                  <span class="field-label">Email</span>
+                  <input id="contactEmailInput" class="text-input" type="email" placeholder="alice@example.com" autocomplete="off" />
+                </label>
+              </div>
+              <div class="settings-actions settings-actions--contacts">
+                <button id="addContactBtn" class="secondary-btn" type="button">Add / Update</button>
+              </div>
+
+              <label class="field directory-import-field">
+                <span class="field-label">Bulk import employees</span>
+                <textarea
+                  id="directoryImportInput"
+                  class="text-input text-input--multiline"
+                  rows="5"
+                  placeholder="Mohit,mohit@grid.company&#10;Anika,anika@grid.company&#10;Riya,riya@grid.company"
+                ></textarea>
+              </label>
+
+              <div class="settings-actions settings-actions--contacts">
+                <button id="importDirectoryBtn" class="ghost-btn" type="button">Import directory</button>
+              </div>
+
+              <div id="contactsList" class="contacts-list"></div>
+            </div>
+          </section>
+
+          <section id="assistantErrorBox" class="error-box hidden"></section>
+
+          <div class="prompt-suggestions" id="promptSuggestions">
+              <button class="prompt-chip" type="button" data-prompt="Find 30 minutes with Mohit and Priya tomorrow afternoon.">30 min tomorrow</button>
+              <button class="prompt-chip" type="button" data-prompt="Book a project sync with Anika, Riya, and me next week.">Project sync</button>
+              <button class="prompt-chip" type="button" data-prompt="Suggest the best slots for a design review with the frontend team this Friday, then wait for my confirmation before creating the invite.">Design review</button>
+          </div>
+
+          <div id="chatMessages" class="chat-messages" aria-live="polite"></div>
+
+          <form id="chatForm" class="chat-form" autocomplete="off">
+            <div class="chat-compose">
+              <div class="chat-compose-label">Ask the assistant</div>
+              <textarea
+                id="chatInput"
+                class="chat-input"
+                rows="3"
+                placeholder='Ask something like: "Find 45 minutes with Mohit, Priya, and Riya tomorrow after 2 PM. Show the best options first, then create the meeting only after I confirm the slot."'
+                required
+              ></textarea>
+            </div>
+            <button id="chatSendBtn" class="secondary-btn" type="submit">Send</button>
+          </form>
+
+          <div class="assistant-footer">
+            The assistant can only check other calendars if you have free/busy visibility or shared access.
+          </div>
+        </section>
+      </div>
     </div>
 
     <script src="sidepanel.js"></script>

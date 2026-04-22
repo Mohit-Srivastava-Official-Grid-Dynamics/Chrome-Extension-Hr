@@ -1,12 +1,15 @@
 {
   "manifest_version": 3,
-  "name": "Timesheet Side Panel",
+  "name": "Calendar Companion",
   "version": "1.0.0",
-  "description": "Shows upcoming Google Calendar meetings in a Chrome side panel.",
-  "permissions": ["identity", "storage", "alarms", "sidePanel"],
-  "host_permissions": ["https://www.googleapis.com/*"],
+  "description": "Shows today's calendar meetings in a Chrome side panel and includes a scheduling assistant.",
+  "permissions": ["identity", "identity.email", "storage", "alarms", "sidePanel"],
+  "host_permissions": [
+    "https://www.googleapis.com/*",
+    "https://us-central1-aiplatform.googleapis.com/*"
+  ],
   "action": {
-    "default_title": "Open Timesheet"
+    "default_title": "Open Calendar Companion"
   },
   "background": {
     "service_worker": "service-worker.js"
@@ -15,9 +18,11 @@
     "default_path": "sidepanel.html"
   },
   "oauth2": {
-    "client_id": "...",
+    "client_id": "216456831198-l7sise7qtgim29s7m7qtbmju26ne5vdj.apps.googleusercontent.com",
     "scopes": [
-      "https://www.googleapis.com/auth/calendar.readonly"
+      "https://www.googleapis.com/auth/calendar.readonly",
+      "https://www.googleapis.com/auth/calendar.events",
+      "https://www.googleapis.com/auth/cloud-platform"
     ]
   },
   "icons": {
