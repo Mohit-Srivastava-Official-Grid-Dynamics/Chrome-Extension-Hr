@@ -355,5 +355,3 @@ Before you ship this extension publicly, make sure to:
 
 - Chrome side panels are opened by the extension action, but Chrome does not let an extension permanently force the panel open for every user interaction.
 - Completed meetings are removed from the visible Schedule tab UI, but they are not deleted from Google Calendar.
-
-If you want, I can also add a short “How to demo this extension” section or turn this README into a more polished product-style document with screenshots placeholders and usage examples.
